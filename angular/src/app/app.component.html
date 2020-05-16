@@ -1,0 +1,104 @@
+<header class="header">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2 pt-5">
+        <h1 class="text-center text-white">Qu'avez vous à faire aujourd'hui ?</h1>
+        <form (ngSubmit)="createTodo()" #todoForm="ngForm" class="mt-3">
+          <div class="form-group">
+            <input name="new-todo" [(ngModel)]="newTodo.title" type="text" class="form-control mainInput" placeholder="" required autocomplete="off">
+            <span class="input-group-btn d-none">
+              <button type="submit" class="btn btn-primary" [disabled]="!todoForm.valid || requesting"></button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container-fluid p-5">
+  <div class="row">
+    <div *ngFor="let todo of todos; let i = index" class="col-12 col-md-3 todo">
+      <div class="todoWrapper p-3">
+        <div class="todoWrapper--header">
+          <div class="d-flex align-items-center justify-content-between">
+            <h4 class="card-title mb-0">{{todo.title}}</h4>
+            <div>
+              <button type="button" class="btn" (click)="deleteTodo(todo)" [disabled]="requesting"><i class="fa fa-trash fa-lg" style="color: white"></i></button>
+            </div>
+          </div>
+          <hr *ngIf="todo.isCollapsed" style="margin: 10px -15px; border-top: 1px solid rgb(255, 255, 255);">
+        </div>
+        <div class="taskExpandWrapper">
+          <button class="btn-expand" (click)="todo.isCollapsed = !todo.isCollapsed" [attr.aria-expanded]="!todo.isCollapsed" aria-controls="collapseTask">
+            <i *ngIf="!todo.isCollapsed" class="text-white fa fa-plus fa-lg"></i>
+            <i *ngIf="todo.isCollapsed" class="text-white fa fa-minus fa-lg"></i>
+          </button>
+        </div>
+        <div class="collapseTask mt-3" [ngbCollapse]="!todo.isCollapsed">
+          <div class="list-wrapper">
+            <ul class="d-flex flex-column taskList">
+              <li *ngFor="let task of todo.tasks" [ngClass]="{'completed': task.state}" class="d-flex justify-content-between taskListItem mb-2">
+                <div class="taskTitles d-flex align-items-center">
+                  <div class="checkbox path mr-3">
+                    <input type="checkbox" [checked]="task.state" (change)="updateTask(task)">
+                    <svg viewBox="0 0 21 21">
+                        <path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path>
+                    </svg>
+                  </div>
+                  <label class="label mb-0"> 
+                    {{task.content}}
+                    <i class="input-helper"></i>
+                  </label> 
+                </div>
+                <button class="btn" (click)="deleteTask(todo, task)" type="button" [disabled]="requesting"><i class="fa fa-trash fa-md" style="color: white"></i></button>
+              </li>
+            </ul>
+            </div>
+              <form (ngSubmit)="createTask(todo)" #taskForm="ngForm" class="mt-3">
+                <div class="form-group">
+                  <input name="new-task" [(ngModel)]="todo.taskContent" type="text" class="form-control inputTask" placeholder="Ajouter une tache" required autocomplete="off">
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary d-none">Ajouter</button>
+                  </span>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+   <!-- <div class="container-fluid p-5">
+     <div class="row">
+    <div *ngFor="let todo of todos; let i = index" class="col-lg-4 todo">
+        <div class="card px-3 mb-5">
+          <div class="card-body">
+              <h4 class="card-title">{{todo.title}}</h4>
+              <form (ngSubmit)="createTask(todo)" #taskForm="ngForm">
+                <div class="add-items d-flex">
+                  <input name="new-task-{{i}}" class="form-control todo-list-input" [(ngModel)]="todo.taskContent" type="text" placeholder="Ajouter une tâche" required autocomplete="off">
+                  <button type="submit" class="add btn btn-primary font-weight-bold todo-list-add-btn">Ajouter</button>
+                  <button class="btn btn-danger btn-sm" style="margin:7px;float:right;" (click)="deleteTodo(todo)" [disabled]="requesting">Supprimer</button>
+                </div>
+              </form>
+                <div class="list-wrapper">
+                    <ul class="d-flex flex-column-reverse todo-list">
+                        <li *ngFor="let task of todo.tasks" [ngClass]="{'completed': task.state}">
+                            <div class="form-check"> 
+                              <label class="form-check-label"> 
+                                <input class="checkbox" type="checkbox" [checked]="task.state" (change)="updateTask(task)"> 
+                                {{task.content}} 
+                                <i class="input-helper"></i>
+                              </label> 
+                            </div> 
+                          <button class="btn-light" (click)="deleteTask(todo, task)" type="button" [disabled]="requesting"><i class="remove mdi mdi-close-circle-outline"></i></button>
+                        </li>
+                    </ul>
+                </div>
+              </div>  
+            </div>          
+        </div>
+      </div>
+    </div> -->

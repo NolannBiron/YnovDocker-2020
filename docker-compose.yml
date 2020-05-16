@@ -1,0 +1,21 @@
+version: '2.0'
+ 
+# Define the services/ containers to be run
+services:
+
+ server: # name of the second service
+  build: . # specify the directory of the Dockerfile
+  ports:
+    - "8080:8080"
+  links:
+    - database # link this service to the database service 
+
+ angular:
+  build: angular 
+
+ database:
+  image: mongo:latest # specify image to build container from
+  container_name: mongodb
+  hostname: mongodb
+  ports:
+    - "27017:27017"
